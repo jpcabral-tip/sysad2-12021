@@ -89,6 +89,7 @@ prelim-exam
 				main.yml
 			README.md
 ansible.cfg*
+config.yaml
 inventory*
 playbook.yaml
 private.key*
