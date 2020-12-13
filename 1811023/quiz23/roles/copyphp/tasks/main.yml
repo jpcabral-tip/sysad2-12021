@@ -1,0 +1,16 @@
+---
+# tasks file for roles/copyphp
+- name: Copy PHP file
+  copy:
+    src: "{{ src }}"
+    dest: "/var/www/{{ domain_name }}/{{ src }}"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: '0755'
+  register: phpfile
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted
+  when: phpfile.changed

@@ -1,0 +1,28 @@
+---
+# tasks file for roles/createdbmysql
+- name: Create database
+  mysql_db:
+    login_host: "{{ db_host }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_pass }}"
+    name: "{( db_name }}"
+    state: present
+
+- name: Copy the SQL script on remote host
+  copy:
+    src: "{{ db_sql }}"
+    dest: "~"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: '0755'
+  register: sqlFile
+
+- name: Import SQL scipt
+  mysql_db:
+    login_host: "{{ db_host }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_pass }}"
+    state: import
+    name: all
+    target: "~/{{ db_sql }}"
+  when: sqlFile.changed

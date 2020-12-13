@@ -1,0 +1,7 @@
+---
+# tasks file for roles/startservice
+- name: Start and Enable Service/s
+  service:
+    name: "{{ service }}"
+    state: started
+    enabled: yes

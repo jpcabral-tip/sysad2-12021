@@ -1,0 +1,87 @@
+---
+  - name: Quiz 2.3 Ansible Roles
+    hosts: ubuntu
+    
+    tasks:
+    - name: Include db authentication
+      include_vars:
+        file: vars/db_config_vars.yaml
+
+
+    - name: Install LAMP (Linux, Apache, MySQL PHP Stack)
+      include_role:
+        name: installpackages
+      vars:
+        package:
+          - apache2
+          - mysql-server
+          - php
+          - libapache2-mod-php
+          - php-mysql
+    
+    - name: Allow HTTP on Port 80
+      ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+
+    - name: Start and enable Apache service
+      include_role:
+        name: startservice
+      vars:
+        service: apache2
+
+    - name: Start and enable MySQL service
+      include_role:
+        name: startservice
+      vars:
+        service: mysql
+
+    - name: Configure Apache with virtual host using createvirtualhost role
+      include_role:
+        name: createvirtualhost
+      vars:
+        domain_name: jpcabral-tip
+        owner: jpcabral-tip
+        group: jpcabral-tip
+        src: jpcabral-tip.conf
+        indexhtml: index.html
+
+    # OPTIONAL PHP MYSQL TASKS??
+    - name: Install MySQL module using installpackages role
+      include_role:
+        name: installpackages
+      vars:
+        package: 
+          - python3
+          - python3-pymysql
+    
+    - name: Install pip requirements for MySQL module using pipinstall role
+      include_role:
+        name: pipinstall
+      vars:
+        pippackage:
+          - pymysql
+
+    - name: Create database user using createdbusermysql role
+      include_role:
+        name: createdbusermysql
+
+    - name: Create database using createdbmysql role
+      include_role:
+        name: createdbmysql
+      vars:
+        db_name: example_database
+        db_sql: db.sql
+        owner: jpcabral-tip
+        group: jpcabral-tip
+
+    - name: Copy php code using copyphp role
+      include_role:
+        name: copyphp
+      vars:
+        src: todo_list.php
+        domain_name: jpcabral-tip
+        owner: jpcabral-tip
+        group: jpcabral-tip
+

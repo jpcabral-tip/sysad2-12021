@@ -1,0 +1,7 @@
+---
+# tasks file for roles/installpackages
+- name: Install Packages
+  apt:
+    name: "{{ package }}"
+    state: latest
+    update_cache: yes
