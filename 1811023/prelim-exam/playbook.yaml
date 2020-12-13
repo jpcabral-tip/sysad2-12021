@@ -1,0 +1,24 @@
+---
+  - name: Prelim Exam
+    hosts: ubuntu
+    
+    tasks:
+    - name: Include config.yaml variables
+      include_vars:
+        file: config.yaml
+
+    - name: Role 1 (python)
+      include_role:
+        name: python
+
+    - name: Role 2 (java)
+      include_role:
+        name: java
+
+    - name: Role 3 (change motd)
+      include_role:
+        name: changemotd
+
+    - name: Role 4 (create user)
+      include_role:
+        name: createuser
