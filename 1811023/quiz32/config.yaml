@@ -1,0 +1,5 @@
+domain: jpcabral-tip
+owner: jpcabral-tip
+group: jpcabral-tip
+ubuntu_src: jpcabral-tip-ubuntu.conf
+centos_src: jpcabral-tip-centos.conf

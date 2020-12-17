@@ -1,0 +1,6 @@
+---
+# tasks file for roles/installpackagecentos
+- name: Install Package using dnf
+  dnf:
+    name: "{{ package }}"
+    state: latest

@@ -1,0 +1,41 @@
+---
+  - name: Install HTTPD
+    hosts: webserver
+
+    tasks:
+    - name: Install Apache using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: apache2
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install HTTPD using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: httpd
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Configure HTTPD
+    hosts: webserver
+
+    tasks:
+      # REPLACE VALUES OF VARIABLES ON config.yaml
+    - name: Include config.yaml variables
+      include_vars:
+        file: config.yaml
+
+    - name: Configure Apache2 using configureapacheubuntu role
+      include_role:
+        name: configureapacheubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+  
+    - name: Configure HTTPD using configurehttpdcentos role
+      include_role:
+        name: configurehttpdcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+
