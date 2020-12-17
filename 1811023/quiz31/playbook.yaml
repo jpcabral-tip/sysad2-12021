@@ -1,0 +1,54 @@
+---
+  - name: Install VSFTPD
+    hosts: ftpserver
+
+    tasks:
+    - name: Install VSFTPD using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: vsftpd
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install HTTPD using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: vsftpd
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Stop Firewall
+    hosts: ftpserver
+
+    tasks:
+    - name: Stop UFW on Ubuntu using stopfirewallubuntu role
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Stop FirewallD on CentOS using stopfirewallcentos
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Configure VSFTPD
+    hosts: ftpserver
+
+    tasks:
+      # REPLACE VALUES OF VARIABLES ON config.yaml
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Configure VSFTPD on Ubuntu using configurevsftpdubuntu
+      include_role:
+        name: configurevsftpdubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Configure VSFTPD on CentOS using configurevsftpcentos
+      include_role:
+        name: configurevsftpcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+

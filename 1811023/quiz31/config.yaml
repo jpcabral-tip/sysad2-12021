@@ -1,0 +1,9 @@
+name: ftpuser
+password: $5$Xz2k7xh2IwRAOtda$X/yQSNPOlQ0Y7t4OdlLCPvrf6vb0DAZEaJfE5tBux.D
+user_comment: "FTP User"
+
+ubuntu_vsftpd: u-vsftpd.conf
+centos_vsftpd: c-vsftpd.conf
+
+# password is "password"
+# generated using `mkpasswd -m sha-512 password`
