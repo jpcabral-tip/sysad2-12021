@@ -1,0 +1,7 @@
+---
+# tasks file for roles/installpackagecentos
+- name: Install Package using dnf
+  yum:
+    name: "{{ package }}"
+    state: latest
+    update_cache: yes

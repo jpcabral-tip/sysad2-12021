@@ -1,0 +1,7 @@
+---
+# tasks file for roles/bindcentos
+- name: Start named service
+  service:
+    name: named
+    state: started
+    enabled: yes

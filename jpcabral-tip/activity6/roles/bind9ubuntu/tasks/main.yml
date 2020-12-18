@@ -1,0 +1,7 @@
+---
+# tasks file for roles/bind9ubuntu
+- name: Start Bind9
+  service:
+    name: bind9
+    state: started
+    enabled: yes

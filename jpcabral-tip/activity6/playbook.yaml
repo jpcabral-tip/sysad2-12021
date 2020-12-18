@@ -1,0 +1,226 @@
+---
+  - name: Install and configyre Apache/HTTPD
+    hosts: webserver
+
+    tasks:
+    - name: Include config.yaml variables
+      include_vars:
+        file: config.yaml
+
+    - name: Install Apache using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: apache2
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install HTTPD using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: httpd
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Configure Apache2 using configureapacheubuntu role
+      include_role:
+        name: configureapacheubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Configure HTTPD using configurehttpdcentos role
+      include_role:
+        name: configurehttpdcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Install and configure VSFTPD
+    hosts: ftpserver
+
+    tasks:
+    - name: Include config.yaml variables
+      include_vars:
+        file: config.yaml
+
+    - name: Install VSFTPD using using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: vsftpd
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install HTTPD using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: vsftpd
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Stop UFW on ubuntu using stopfirewallubuntu role
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Stop FirewallD on CentOS using stopfirewallcentos role
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Configure VSFTPD on Ubuntu using configurevsftpdubuntu
+      include_role:
+        name: configurevsftpdubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Configure VSFTPD on CentOS uisng configurevsftpcentos
+      include_role:
+        name: configurevsftpcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Install and configure DHCPD
+    hosts: dhcpserver
+
+    tasks:
+    - name: Install isc-dhcp-server using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: isc-dhcp-server
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install dhcp-server using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: dhcp-server
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Stop Firewall on Ubuntu
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Stop Firewall on CentOS
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Install MariaDB
+    hosts: dbserver
+
+    tasks:
+    - name: Install MariaDB using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: mariadb-server
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install MariaDB using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: mariadb-server
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Stop Firewall on Ubuntu
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Stop Firewall on CentOS
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Start MariaDB on Ubuntu using mariadbubuntu role
+      include_role:
+        name: mariadbubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+    
+    - name: Start MariaDB on CentOS using mariadbcentos role
+      include_role:
+        name: mariadbcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Install Bind9
+    hosts: dnsserver
+
+    tasks:
+    - name: Install Bind9 using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: bind9
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Bind9 using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package:
+          - bind
+          - bind-utils
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Stop Firewall on Ubuntu
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Stop Firewall on CentOS
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Start Bind9 on Ubuntu using bind9ubuntu role
+      include_role:
+        name: bind9ubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Start Bind on CentOS using bindcentos role
+      include_role:
+        name: bindcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+      
+  - name: Install Samba
+    hosts: sambashare
+
+    tasks:
+    - name: Install Samba using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package: samba
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Samba using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package:
+          - samba
+          - samba-common
+          - samba-client
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Stop Firewall on Ubuntu
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Stop Firewall on CentOS
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+    
+    - name: Start Samba on Ubuntu using sambaubuntu role
+      include_role:
+        name: sambaubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+    
+    - name: Start Samba on CentOS using sambacentos role
+      include_role:
+        name: sambacentos
+      when: ansible_facts['os_family'] == 'RedHat'

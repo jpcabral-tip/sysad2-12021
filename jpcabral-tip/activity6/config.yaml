@@ -1,0 +1,13 @@
+#APACHE/HTTPD
+domain: jpcabral-tip
+owner: jpcabral-tip
+group: jpcabral-tip
+ubuntu_src: jpcabral-tip-ubuntu.conf
+centos_src: jpcabral-tip-centos.conf
+
+#VSFTPD
+name: ftpuser
+password: $5$Xz2k7xh2IwRAOtda$X/yQSNPOlQ0Y7t4OdlLCPvrf6vb0DAZEaJfE5tBux.D
+user_comment: "FTP User"
+ubuntu_vsftpd: u-vsftpd.conf
+centos_vsftpd: c-vsftpd.conf
