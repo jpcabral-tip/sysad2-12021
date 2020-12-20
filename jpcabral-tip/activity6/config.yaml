@@ -11,3 +11,4 @@ password: $5$Xz2k7xh2IwRAOtda$X/yQSNPOlQ0Y7t4OdlLCPvrf6vb0DAZEaJfE5tBux.D
 user_comment: "FTP User"
 ubuntu_vsftpd: u-vsftpd.conf
 centos_vsftpd: c-vsftpd.conf
+#Note: The password is "password". Generated using mkpasswd with sha-512 as method.
