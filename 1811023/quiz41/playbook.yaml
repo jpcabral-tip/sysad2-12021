@@ -1,0 +1,53 @@
+---
+  - name: Install Nagios
+    hosts: nagios
+
+    tasks:
+    - name: Install Nagios dependencies using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        package:
+          - autoconf
+          - gcc
+          - libc6
+          - make
+          - wget
+          - unzip
+          - apache2
+          - php
+          - libapache2-mod-php7.4
+          - libgd-dev
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Nagios dependencies using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package:
+          - gcc
+          - glibc
+          - glibc-common
+          - perl
+          - httpd
+          - php
+          - wget
+          - gd
+          - gd-devel
+      when: ansible_facts['os_family'] == 'RedHat'
+
+
+  - name: Configure Nagios
+    hosts: nagios
+
+    tasks:
+    - name: Configure Nagios using configurenagiosubuntu role
+      include_role:
+        name: configurenagiosubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+    
+    - name: Configure Nagios using configurenagioscentos role
+      include_role:
+        name: configurenagioscentos
+      when: ansible_facts['os_family'] == 'RedHat' 
+
