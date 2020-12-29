@@ -1,6 +1,7 @@
 # Directory Summary
 
 **Author:** Jose Paulo Cabral
+
 **Playbook:** Nagios Core Installation for Ubuntu 20.04 LTS and/or CentOS 8
 
 ## Prequisites
@@ -13,7 +14,8 @@
 
 * configured SSH key-based authentication
 * passwordless sudo on remote machines
-	Note: On remote machines execute ``sudo visudo`` and append the following line to enable passwordless sudo on account.
+
+Note: On remote machines execute ``sudo visudo`` and append the following line to enable passwordless sudo on account.
 	```
 	<user> ALL=(ALL) NOPASSWD:ALL
 	```
