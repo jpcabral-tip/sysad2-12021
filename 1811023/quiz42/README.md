@@ -1,6 +1,7 @@
 # Directory Summary
 
 **Author:** Jose Paulo Cabral
+
 **Playbook:** Grafana, Prometheus, and Telegraf (with InfluxDB) Installation for Ubuntu 20.04 LTS and/or CentOS 8
 
 ## Prequisites
