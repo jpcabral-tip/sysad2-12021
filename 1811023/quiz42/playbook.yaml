@@ -44,11 +44,19 @@
       vars:
         url: ""
         repo: ""
-        package:
-          - gnupg2
-          - software-properties-common
+        package: gnupg2
         service: ""
       when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Telegraf dependencies on Ubuntu using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: software-properties-common
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian' 
 
     - name: Install InfluxDB on Ubuntu using installpackageubuntu role
       include_role:
