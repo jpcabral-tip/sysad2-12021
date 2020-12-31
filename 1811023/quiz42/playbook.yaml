@@ -116,6 +116,8 @@
     - name: Install Prometheus on Ubuntu using installprometheusubuntu role
       include_role:
         name: installprometheusubuntu
+      vars:
+        src: prometheus.service
       when: ansible_facts['os_family'] == 'Debian'
     
     - name: Stop Firewall on Ubuntu using stopfirewallubuntu role
@@ -126,6 +128,8 @@
     - name: Install Prometheus on CentOS using installprometeuscentos role
       include_role:
         name: installprometheuscentos
+      vars:
+        src: prometheus.service
       when: ansible_facts['os_family'] == 'RedHat'
 
     - name: Stop Firewall on CentOS using stopfirewallcentos role

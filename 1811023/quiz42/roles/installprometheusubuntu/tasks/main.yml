@@ -74,7 +74,7 @@
 
 - name: Copy Prometheus systemd.service to /etc/systemd/system/prometheus.service
   copy:
-    src: prometheus.service-ubuntu
+    src: "{{ src }}"
     dest: /etc/systemd/system/prometheus.service
     mode: '0755'
 
