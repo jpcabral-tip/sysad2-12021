@@ -1,0 +1,38 @@
+---
+# tasks file for roles/configureelasticsearchubuntu
+- name: Edit host elasticsearch.yml
+  replace:
+    path: /etc/elasticsearch/elasticsearch.yml
+    regexp: "#network.host: 192.168.0.1"
+    replace: "network.host: {{ elasticsearch_host }}"
+  register: elasticsearch_yml1
+
+- name: Allow port on elasticsearch.yml
+  replace:
+    path: /etc/elasticsearch/elasticsearch.yml
+    regexp: "#http.port: 9200"
+    replace: "http.port: 9200"
+  register: elasticsearch_yml1
+
+- name: Create a service drop-in configuration directory
+  file:
+    path: /etc/systemd/system/elasticsearch.service.d
+    state: directory
+    mode: '0755'
+
+- name: Increase systemd TimeoutStartSe
+  copy:
+    src: "{{ systemd_src }}"
+    dest: "/etc/systemd/system/elasticsearch.service.d/startup-timeout.conf"
+    mode: '0755'
+  register: timeout_conf
+
+- name: Reload systemctl daemon
+  shell: systemctl daemon-reload
+  when: timeout_conf.changed
+
+- name: Start and enable Elasticsearch
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes

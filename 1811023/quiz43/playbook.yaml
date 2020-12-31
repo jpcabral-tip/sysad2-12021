@@ -1,0 +1,248 @@
+---
+  - name: Installing and Configuring Elasticsearch
+    hosts: elasticsearch
+
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install Elasticsearch dependencies (Java) using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: default-jre
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Elasticsearch dependencies (Nginx) using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: nginx
+        service: "nginx"
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Elasticsearch using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+        repo: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+        package: elasticsearch
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian' 
+
+    - name: Install Elasticsearch dependencies using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: "java-1.8.0-openjdk"
+        src: ""
+        dest: ""
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Elasticsearch dependencies (Nginx) using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: "nginx"
+        src: ""
+        dest: ""
+        service: "nginx"
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Elasticsearch using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: elasticsearch
+        src: elasticsearch.repo-centos
+        dest: "/etc/yum.repos.d/elasticsearch.repo"
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Stop Firewall using stopfirewallubuntu role
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian' 
+
+    - name: Stop Firewall using stopfirewallcentos role
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Configure Elasticsearch using configureelasticsearch role
+      include_role:
+        name: configureelasticsearch
+
+
+  - name: Install and Configure Kibana
+    hosts: kibana
+
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install Kibana dependencies (Java) using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: default-jre
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Kibana dependencies (Nginx) using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: nginx
+        service: "nginx"
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Kibana using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+        repo: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+        package: kibana
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian' 
+
+    - name: Install Kibana dependencies using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: "java-1.8.0-openjdk"
+        src: ""
+        dest: ""
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Elasticsearch dependencies (Nginx) using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: "nginx"
+        src: ""
+        dest: ""
+        service: "nginx"
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Kibana using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: kibana
+        src: elasticsearch.repo-centos
+        dest: "/etc/yum.repos.d/elasticsearch.repo"
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Stop Firewall using stopfirewallubuntu role
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian' 
+
+    - name: Stop Firewall using stopfirewallcentos role
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Configure Kibana using configurekibana role
+      include_role:
+        name: configurekibana
+
+
+  - name: Install and Configure Logstash
+    hosts: logstash
+
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install Logstash dependencies (Java) using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: default-jre
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Logstash dependencies (Nginx) using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: nginx
+        service: "nginx"
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Logstash using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+        repo: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+        package: logstash
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian' 
+
+    - name: Install Logstash dependencies using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: "java-1.8.0-openjdk"
+        src: ""
+        dest: ""
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Logstash dependencies (Nginx) using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: "nginx"
+        src: ""
+        dest: ""
+        service: "nginx"
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install Logstash using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: logstash
+        src: elasticsearch.repo-centos
+        dest: "/etc/yum.repos.d/elasticsearch.repo"
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Stop Firewall using stopfirewallubuntu role
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_facts['os_family'] == 'Debian' 
+
+    - name: Stop Firewall using stopfirewallcentos role
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Configure Logstash using configurekibana role
+      include_role:
+        name: configurelogstash
