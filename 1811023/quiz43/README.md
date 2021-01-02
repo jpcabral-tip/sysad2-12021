@@ -43,14 +43,16 @@ $ ansible-playbook playbook.yaml
 ## Directory Structure
 
 ```
-quiz43/
+
+quiz43
 ├── README.md
 ├── ansible.cfg
 ├── config.yaml
 ├── files
 │   ├── elastic-timeout.conf
 │   ├── elasticsearch.repo-centos
-│   └── jpcabral-tip
+│   ├── jpcabral-tip
+│   └── logstash.conf
 ├── inventory
 ├── playbook.yaml
 └── roles
@@ -174,5 +176,5 @@ quiz43/
         └── vars
             └── main.yml
 
-65 directories, 64 files
+65 directories, 65 files
 ```

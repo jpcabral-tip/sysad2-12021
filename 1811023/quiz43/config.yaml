@@ -6,4 +6,4 @@ systemd_src: elastic-timeout.conf
 kibana_host: localhost
 
 # Logstash Variables
-logstash_elastic_host: localhost
+logstash_conf: logstash.conf
