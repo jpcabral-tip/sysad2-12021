@@ -1,3 +1,4 @@
+```
 midterm-exam/
 ├── README.md
 ├── ansible.cfg
@@ -273,3 +274,4 @@ midterm-exam/
             └── main.yml
 
 137 directories, 135 files
+```
