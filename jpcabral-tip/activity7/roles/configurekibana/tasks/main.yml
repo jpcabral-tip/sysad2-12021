@@ -1,0 +1,33 @@
+---
+# tasks file for roles/configurekibanacentos
+- name: Enable port 5601
+  replace:
+    path: "/etc/kibana/kibana.yml"
+    regexp: "#server.port: 5601"
+    replace: "server.port: 5601"
+  register: kibana_yml1
+
+- name: Set host
+  replace:
+    path: "/etc/kibana/kibana.yml"
+    regexp: '#server.host: "localhost"'
+    replace: 'server.host: "{{ kibana_host }}"'
+  register: kibana_yml2
+
+- name: Enable port 5601
+  lineinfile:
+    path: "/etc/kibana/kibana.yml"
+    line: 'elasticsearch.hosts: ["http://{{ kibana_host }}:9200"]'
+  register: kibana_yml3
+
+- name: Start and enable Kibana
+  service:
+    name: kibana
+    state: started
+    enabled: yes
+
+- name: Restart Kibana
+  service:
+    name: kibana
+    state: restarted
+  when: kibana_yml1.changed or kibana_yml2.changed or kibana_yml3.changed

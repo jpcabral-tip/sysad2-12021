@@ -1,0 +1,9 @@
+# Elastic Search Variables
+elasticsearch_host: localhost
+systemd_src: elastic-timeout.conf
+
+# Kibana Variables
+kibana_host: localhost
+
+# Logstash Variables
+logstash_conf: logstash.conf
