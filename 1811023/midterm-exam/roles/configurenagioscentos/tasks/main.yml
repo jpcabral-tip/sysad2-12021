@@ -1,0 +1,89 @@
+---
+# tasks file for roles/configurenagioscentos
+- name: Stop Firewall
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: Download and unarchive Nagios Core source
+  unarchive:
+    src: https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.5.tar.gz
+    dest: /tmp/
+    remote_src: yes
+  register: nagios_source
+
+- name: Create Make file
+  shell: cd /tmp/nagioscore-nagios-4.4.5; sh /tmp/nagioscore-nagios-4.4.5/configure
+  register: make_file
+  when: nagios_source.changed
+
+- name: Compile from source
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: all
+  become: yes
+  when: make_file.changed
+
+- name: Create user and group
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: install-groups-users
+  become: yes
+  when: make_file.changed
+
+- name: Add apache to nagios group
+  user:
+    name: apache
+    groups: nagios
+    append: yes
+
+- name: Install binaries
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: install
+  become: yes
+  when: make_file.changed
+
+- name: Install service/daemon
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: install-daemoninit
+  become: yes
+  when: make_file.changed
+  register: daemoninit
+
+- name: Enable HTTPD service
+  service:
+    name: httpd
+    enabled: yes
+  when: daemoninit.changed
+
+- name: Install command mode
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: install-commandmode
+  become: yes
+  when: make_file.changed
+
+- name: Install configuration files
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: install-config
+  become: yes
+  when: make_file.changed
+
+- name: Install Apache config files
+  make:
+    chdir: /tmp/nagioscore-nagios-4.4.5/
+    target: install-webconf
+  become: yes
+  when: make_file.changed
+  register: install_webconf
+  
+- name: Start and enable Apache
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  when: install_webconf.changed

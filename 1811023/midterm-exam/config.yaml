@@ -1,0 +1,17 @@
+# Elastic Search Variables
+elasticsearch_host: localhost
+systemd_src: elastic-timeout.conf
+
+# Kibana Variables
+kibana_host: localhost
+
+# Logstash Variables
+logstash_conf: logstash.conf
+
+# LAMP Variables
+domain: jpcabral-tip
+owner: jpcabral-tip
+group: jpcabral-tip
+index_html: index.html
+ubuntu_src: jpcabral-tip-ubuntu.conf
+centos_src: jpcabral-tip-centos.conf
