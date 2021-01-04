@@ -81,9 +81,32 @@
   when: make_file.changed
   register: install_webconf
   
+- name: Copy nagios.service unit
+  copy:
+    content: |
+      [Unit]
+      Description=Nagios
+      BindTo=network.target
+
+      [Install]
+      WantedBy=multi-user.target
+
+      [Service]
+      User=nagios
+      Group=nagios
+      Type=simple
+      ExecStart=/usr/local/nagios/bin/nagios /usr/local/nagios/etc/nagios.cfg
+    dest: "/etc/systemd/system/nagios.service"
+
 - name: Start and enable Apache
   service:
     name: httpd
     state: started
     enabled: yes
   when: install_webconf.changed
+
+- name: Start and enable Nagios
+  service:
+    name: nagios
+    state: started
+    enabled: yes
