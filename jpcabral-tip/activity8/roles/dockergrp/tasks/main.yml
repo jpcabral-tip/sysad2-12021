@@ -1,0 +1,12 @@
+---
+# tasks file for roles/dockergrp
+- name: Emsure docker group is present
+  group:
+    name: docker
+    state: present
+
+- name: Add user to docker group
+  user:
+    name: "{{ docker_user }}"
+    group: docker
+    append: yes

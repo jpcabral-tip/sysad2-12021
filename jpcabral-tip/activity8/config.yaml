@@ -1,5 +1,8 @@
 docker_repo: docker-ce.repo
 
+# Docker user
+docker_user: jpcabral-tip
+
 # WEB SERVER
 web_docker_img_name: web
 web_docker_img_tag: latest

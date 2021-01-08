@@ -67,6 +67,10 @@
         name: pipinstall
       vars:
         pippackage: docker
+    
+    - name: Add user to docker group
+      include_role:
+        name: dockergrp
 
     - name: Build and run LAMP stack using lampstackdocker role
       include_role:
