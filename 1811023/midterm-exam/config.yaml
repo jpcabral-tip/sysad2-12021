@@ -8,6 +8,10 @@ kibana_host: localhost
 # Logstash Variables
 logstash_conf: logstash.conf
 
+# Nagios Variables
+nagios_user: nagiosadmin
+nagios_password: password
+
 # LAMP Variables
 domain: jpcabral-tip
 owner: jpcabral-tip

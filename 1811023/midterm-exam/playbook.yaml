@@ -253,6 +253,10 @@
     hosts: nagios
 
     tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
     - name: Install Nagios dependencies using installpackageubuntu role
       include_role:
         name: installpackageubuntu
@@ -265,11 +269,20 @@
           - libc6
           - make
           - wget
+          - libssl-dev
+          - gawk
+          - dc
+          - build-essential
+          - snmp
+          - libnet-snmp-perl
+          - gettext
           - unzip
           - apache2
           - php
           - libapache2-mod-php7.4
           - libgd-dev
+          - python3
+          - python3-pip
         service: ""
       when: ansible_facts['os_family'] == 'Debian'
 
@@ -281,12 +294,21 @@
           - gcc
           - glibc
           - glibc-common
+          - make
+          - gettext
+          - automake
+          - autoconf
           - perl
           - httpd
           - php
           - wget
+          - openssl-devel
+          - net-snmp
+          - net-snmp-utils
           - gd
           - gd-devel
+          - python3
+          - python3-pip
         src: ""
         dest: ""
         service: ""

@@ -80,7 +80,19 @@
   become: yes
   when: make_file.changed
   register: install_webconf
-  
+
+- name: Pip install passlib
+  pip:
+    name: passlib
+    state: present
+
+- name: Create admin username and password for authentication
+  htpasswd:
+    path: /usr/local/nagios/etc/htpasswd.users
+    name: "{{ nagios_user }}"
+    password: "{{ nagios_password }}"
+  register: useradded
+
 - name: Copy nagios.service unit
   copy:
     content: |
@@ -110,3 +122,40 @@
     name: nagios
     state: started
     enabled: yes
+
+- name: Restart Nagios
+  service:
+    name: nagios
+    state: restarted
+  when: useradded.changed
+
+- name: Download and unarchive Nagios Plugins
+  unarchive:
+    src: https://github.com/nagios-plugins/nagios-plugins/archive/release-2.2.1.tar.gz
+    dest: /tmp/
+    remote_src: yes
+  register: nagios_plugin
+
+- name: Create Make file
+  shell: cd /tmp/nagios-plugins-release-2.2.1; sh /tmp/nagios-plugins-release-2.2.1/tools/setup; sh /tmp/nagios-plugins-release-2.2.1/configure
+  register: plugin_make_file
+  when: nagios_plugin.changed
+
+- name: Compile from source
+  make:
+    chdir: /tmp/nagios-plugins-release-2.2.1/
+  become: yes
+  when: plugin_make_file.changed
+
+- name: Compile from source
+  make:
+    chdir: /tmp/nagios-plugins-release-2.2.1/
+    target: install
+  become: yes
+  when: plugin_make_file.changed
+
+- name: Restart Nagios
+  service:
+    name: nagios
+    state: restarted
+  when: plugin_make_file.changed
