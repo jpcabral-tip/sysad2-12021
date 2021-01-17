@@ -1,0 +1,44 @@
+# Git repository
+git_repo: 'https://github.com/jpcabral-tip/sysad2-12021.git'
+git_dest: '/home/{{ ansible_user }}/sysad2-12021'
+git_ver: 'prelim-exam'
+
+
+# FTP variables
+ubuntu_vsftpd: u-vsftpd.conf
+centos_vsftpd: c-vsftpd.conf
+opensuse_vsftpd: o-vsftpd.conf
+# password is "password"
+# generated using `mkpasswd -m sha-512 password`
+name: ftpuser
+password: $5$Xz2k7xh2IwRAOtda$X/yQSNPOlQ0Y7t4OdlLCPvrf6vb0DAZEaJfE5tBux.D
+user_comment: "FTP User"
+
+
+# Nagios variables
+nagios_user: nagiosadmin
+nagios_password: password
+
+
+# MOTD text
+motd: "Ansible Managed by {{ ansible_user }}"
+# Note: MOTD only appears on OpenSuse Tumbleweed after logging in as root at least once.
+
+
+# ELK variables
+# docker repo for centos
+docker_repo: docker-ce.repo
+
+# IMAGES
+elasticsearch_image: "docker.elastic.co/elasticsearch/elasticsearch:7.10.1"
+logstash_image: "docker.elastic.co/logstash/logstash:7.10.1"
+kibana_image: "docker.elastic.co/kibana/kibana:7.10.1"
+
+# HOSTNAMES
+elasticsearch_hostname: elasticsearch
+logstash_hostname: logstash
+kibana_hostname: kibana
+
+# Logstash configuration file
+logstash_conf: "logstash.conf2"
+# sample logstash.conf files on files/ (logstash.conf > usual filebeat config; logstash.conf2 > tcp listener for testing)

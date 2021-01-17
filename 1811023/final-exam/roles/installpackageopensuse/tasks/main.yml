@@ -1,0 +1,7 @@
+---
+# tasks file for roles/installpackageopensuse
+- name: Install packages
+  zypper:
+    name: "{{ package }}"
+    state: present
+    update_cache: yes

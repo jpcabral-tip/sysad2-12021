@@ -1,0 +1,68 @@
+---
+# tasks file for roles/configurenagiosubuntu
+- name: Stop Firewall
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: Start Apache2
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+
+- name: Add www-data user to nagios group
+  user:
+    name: wwwrun
+    groups: nagios
+    append: yes
+  become: yes
+  register: group_added
+
+- name: Enable rewrite module
+  shell: /usr/sbin/a2enmod rewrite
+  when: group_added.changed
+
+- name: Enable cgi module
+  shell: /usr/sbin/a2enmod cgi
+  when: group_added.changed
+
+- name: Enable version module
+  shell: /usr/sbin/a2enmod version
+  when: group_added.changed
+
+- name: Enable php7 module
+  shell: /usr/sbin/a2enmod php7
+  when: group_added.changed
+
+- name: Pip install passlib
+  pip:
+    name: passlib
+    state: present
+
+- name: Create admin username and password for authentication
+  htpasswd:
+    path: /etc/nagios/htpasswd.users
+    name: "{{ nagios_user }}"
+    password: "{{ nagios_password }}"
+  register: useradded
+
+- name: Restart apache2
+  service:
+    name: apache2
+    state: restarted
+  when: useradded.changed
+
+- name: Start and enable nagios
+  service:
+    name: nagios
+    state: started
+    enabled: yes
+
+- name: Restart nagios
+  service:
+    name: nagios
+    state: restarted
+  when: useradded.changed
+

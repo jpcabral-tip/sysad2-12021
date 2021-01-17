@@ -1,0 +1,7 @@
+---
+# tasks file for roles/gitclone
+- name: Clone a repository
+  git:
+    repo: "{{ git_repo }}"
+    dest: "{{ git_dest }}"
+    version: "{{ git_ver }}"

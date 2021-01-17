@@ -1,0 +1,44 @@
+---
+# tasks file for roles/configurevsftpcentos
+- name: Stop firewall
+  service:
+    name: firewalld
+    state: stopped
+
+- name: Start and Enable vsftpd
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
+
+- name: Create FTP User
+  user:
+    name: "{{ name }}"
+    password: "{{ password }}"
+    comment: "{{ user_comment }}"
+
+- name: Create FTP directory
+  file:
+    path: "/home/{{ name }}/ftp"
+    state: directory
+    owner: "{{ name }}"
+    group: "{{ name }}"
+    mode: '0755'
+
+- name: Add FTP user to user_list
+  lineinfile:
+    path: /etc/vsftpd/user_list
+    line: "{{ name }}"
+  register: user_list
+
+- name: Copy vsftpd.conf to /etc/vsftpd/vsftpd.conf
+  copy:
+    src: "{{ centos_vsftpd }}"
+    dest: /etc/vsftpd/vsftpd.conf
+  register: vsftpd_conf
+
+- name: Restart VSFTPD
+  service:
+    name: vsftpd
+    state: restarted
+  when: user_list.changed or vsftpd_conf.changed

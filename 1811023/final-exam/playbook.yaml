@@ -1,0 +1,397 @@
+---
+  - name: 4.1 | Clone prelim exam repository | Install Git and clone repository
+    hosts: git
+    
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install Git using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: git
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install Git using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: git
+        dest: ""
+        src: ""
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat' 
+    
+    - name: Install git using installpackageopensuse role
+      include_role:
+        name: installpackageopensuse
+      vars:
+        package: git
+      when: ansible_facts['os_family'] == 'Suse'
+
+    - name: Clone prelim-exam repository
+      include_role:
+        name: gitclone
+
+
+
+  - name: 4.2 | Install and configure one enterprise service | Install VSFTPD
+    hosts: ftpserver
+
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install VSFTPD using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package: vsftpd
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install VSFTPD using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package: vsftpd
+        dest: ""
+        src: ""
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Install VSFTPD using installpackageopensuse role
+      include_role:
+        name: installpackageopensuse
+      vars:
+        package: vsftpd
+      when: ansible_facts['os_family'] == 'Suse'
+
+    - name: Configure VSFTPD on Ubuntu using configurevsftpdubuntu
+      include_role:
+        name: configurevsftpdubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Configure VSFTPD on CentOS using configurevsftpcentos
+      include_role:
+        name: configurevsftpcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Configure VSFTPD on OpenSuse using configurevsftpdubuntu
+      include_role:
+        name: configurevsftpdopensuse
+      when: ansible_facts['os_family'] == 'Suse'
+
+
+  - name: 4.3 | Install and configure one monitoring tool | Install and configure Nagios
+    hosts: nagios
+
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install Nagios dependencies using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package:
+          - autoconf
+          - gcc
+          - libc6
+          - libmcrypt-dev
+          - make
+          - wget
+          - libssl-dev
+          - gawk
+          - dc
+          - build-essential
+          - snmp
+          - libnet-snmp-perl
+          - gettext
+          - unzip
+          - apache2
+          - php
+          - libapache2-mod-php7.4
+          - libgd-dev
+          - python3
+          - python3-pip
+        service: ""
+      when: ansible_distribution == "Ubuntu"
+  
+    - name: Install Nagios dependencies using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        package:
+          - autoconf
+          - gcc
+          - libc6
+          - libmcrypt-dev
+          - make
+          - wget
+          - libssl-dev
+          - gawk
+          - dc
+          - build-essential
+          - snmp
+          - libnet-snmp-perl
+          - gettext
+          - unzip
+          - apache2
+          - php
+          - libgd-dev
+          - python3
+          - python3-pip
+          - python
+          - python-pip
+        service: ""
+      when: ansible_distribution == "Debian"
+
+    - name: Install Nagios dependencies using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        package:
+          - gcc
+          - glibc
+          - glibc-common
+          - make
+          - gettext
+          - automake
+          - autoconf
+          - perl
+          - httpd
+          - php
+          - wget
+          - openssl-devel
+          - net-snmp
+          - net-snmp-utils
+          - gd
+          - gd-devel
+          - python3
+          - python3-pip
+        dest: ""
+        src: ""
+        service: ""
+      when: ansible_facts['os_family'] == 'RedHat'
+    
+    - name: Install Nagios dependencies using installpackageopensuse role
+      include_role:
+        name: installpackageopensuse
+      vars:
+        package:
+          - autoconf
+          - gcc
+          - glibc
+          - libgcrypt-devel
+          - make
+          - libopenssl-devel
+          - wget
+          - gettext
+          - gettext-runtime
+          - automake
+          - net-snmp
+          - perl-Net-SNMP
+          - unzip
+          - apache2
+          - apache2-utils
+          - php7
+          - apache2-mod_php7
+          - gd
+          - gd-devel
+          - python3
+          - python3-pip
+      when: ansible_distribution == 'openSUSE Leap'
+    
+    - name: Install Nagios dependencies using installpackageopensuse role
+      include_role:
+        name: installpackageopensuse
+      vars:
+        package:
+          - apache2
+          - python3
+          - python3-pip
+          - nagios
+          - nagios-www
+      when: ansible_distribution == 'openSUSE Tumbleweed'
+
+    - name: Configure Nagios using configurenagiosubuntu role
+      include_role:
+        name: configurenagiosubuntu
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Configure Nagios using configurenagioscentos role
+      include_role:
+        name: configurenagioscentos
+      when: ansible_facts['os_family'] == 'RedHat' 
+
+    - name: Configure Nagios using configurenagiosopensuse role
+      include_role:
+        name: configurenagiosopensuse
+      when: ansible_distribution == 'openSUSE Leap'
+
+    - name: Configure Nagios using configurenagiosopensuse_t role
+      include_role:
+        name: configurenagiosopensuse_t
+      vars:
+        package:
+          - nagios
+      when: ansible_distribution == 'openSUSE Tumbleweed'
+
+
+  - name: 4.3 | Install and configure one monitoring tool | --Additional-- Install Containerized ELK Stack (Docker)
+    hosts: elk
+    
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Install Docker dependencies using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        filename: ""
+        package:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          - python3
+          - python3-pip
+        service: ""
+      when: ansible_facts['os_family'] == 'Debian' 
+    
+    - name: Install Docker python dependencies using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: ""
+        repo: ""
+        filename: ""
+        package:
+          - python
+          - python-pip
+        service: ""
+      when: ansible_distribution == 'Debian'
+
+    - name: Install Docker using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: "https://download.docker.com/linux/ubuntu/gpg"
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        filename: "docker-ce"
+        package:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        service: docker
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install Docker using installpackageubuntu role
+      include_role:
+        name: installpackageubuntu
+      vars:
+        url: "https://download.docker.com/linux/ubuntu/gpg"
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
+        filename: "docker-ce"
+        package:
+          - python-docker
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        service: docker
+      when: ansible_distribution == 'Debian'
+
+    - name: Install Docker using installpackagecentos role
+      include_role:
+        name: installpackagecentos
+      vars:
+        src: "{{ docker_repo }}"
+        dest: "/etc/yum.repos.d/docker-ce.repo"
+        package:
+          - docker-ce
+          - python3
+          - python3-pip
+        service: docker
+      when: ansible_facts['os_family'] == 'RedHat'
+   
+    - name: Install Docker using installpackageopensuse role
+      include_role:
+        name: installpackageopensuse
+      vars:
+        package:
+          - docker
+          - python3
+          - python3-pip
+      when: ansible_facts['os_family'] == 'Suse'
+
+    - name: Stop firewall using stopfirewallubuntu role
+      include_role:
+        name: stopfirewallubuntu
+      when: ansible_distribution == 'Ubuntu'  
+
+    - name: Stop firewall using stop firewallcentos role
+      include_role:
+        name: stopfirewallcentos
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - name: Stop firewall using stop firewallopensuse role
+      include_role:
+        name: stopfirewallopensuse
+      when: ansible_facts['os_family'] == 'Suse'
+
+    - name: Pip install docker Python modules
+      include_role:
+        name: pipinstall
+      vars:
+        pippackage: docker
+
+    - name: Pull ELK Images
+      include_role:
+        name: pullimage
+      vars:
+        image: "{{ item }}"
+      loop:
+        - "{{ elasticsearch_image }}"
+        - "{{ logstash_image }}"
+        - "{{ kibana_image }}"
+
+    - name: Setup and configure Elastic Stack
+      include_role:
+        name: elk_setup
+
+
+
+  - name: 4.4 | Change MOTD| Change MOTD to a new default message or defined message in config.yaml
+    hosts: change_motd
+
+    tasks:
+    - name: Include variables from config.yaml
+      include_vars:
+        file: config.yaml
+
+    - name: Include change motd role
+      include_role:
+        name: changemotd
+
+
+
+

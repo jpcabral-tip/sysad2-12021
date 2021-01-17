@@ -1,0 +1,3 @@
+---
+# vars file for roles/changemotd
+motd: "Ansible Managed node by {{ ansible_user}}"

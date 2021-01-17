@@ -1,0 +1,49 @@
+---
+# tasks file for roles/configurevsftpdubuntu
+- name: Stop firewall
+  service:
+    name: firewalld
+    state: stopped
+
+- name: Start and enable VSFTPD
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
+
+- name: Create FTP User
+  user:
+    name: "{{ name }}"
+    password: "{{ password }}"
+    comment: "{{ user_comment }}"
+    home: /srv/ftp
+
+- name: Create FTP group
+  group:
+    name: ftpuser
+    state: present
+
+- name: Add FTP user to FTP group
+  user:
+    name: "{{ name }}"
+    groups: ftpuser
+    append: yes
+
+- name: Change FTP directory ownership
+  file:
+    path: /srv/ftp
+    state: directory
+    group: ftpuser
+
+- name: Copy vsftpd.conf to /etc/vsftpd.comf
+  copy:
+    src: "{{ opensuse_vsftpd }}"
+    dest: /etc/vsftpd.conf
+  register: vsftpd_conf
+
+- name: Restart VSFTPD
+  service:
+    name: vsftpd
+    state: restarted
+  when: vsftpd_conf.changed
+

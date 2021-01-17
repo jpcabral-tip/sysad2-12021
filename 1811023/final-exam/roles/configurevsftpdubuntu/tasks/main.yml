@@ -1,0 +1,58 @@
+---
+# tasks file for roles/configurevsftpdubuntu
+- name: Stop firewall
+  service:
+    name: ufw
+    state: stopped
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Start and enable VSFTPD
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
+
+- name: Create FTP User
+  user:
+    name: "{{ name }}"
+    password: "{{ password }}"
+    comment: "{{ user_comment }}"
+
+- name: Add Deny in /etc/ssh/sshd_config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "DenyUsers {{ name }}"
+  register: sshd_config
+
+- name: Restart SSHD service
+  service:
+    name: sshd
+    state: restarted
+  when: sshd_config.changed
+
+- name: Create FTP directory
+  file:
+    path: "/home/{{ name }}/ftp"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0555'
+
+- name: Create files directory
+  file:
+    path: "/home/{{ name }}/ftp/files"
+    state: directory
+    owner: "{{ name }}"
+    group: "{{ name }}"
+
+- name: Copy vsftpd.conf to /etc/vsftpd.conf
+  copy:
+    src: "{{ ubuntu_vsftpd }}"
+    dest: /etc/vsftpd.conf
+  register: vsftpd_conf
+
+- name: Restart VSFTPD
+  service:
+    name: vsftpd
+    state: restarted
+  when: vsftpd_conf.changed
